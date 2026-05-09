@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/CX-platform-/',
+  base: '/CX-platform-app/',
   root: '.',
   build: {
     outDir: 'dist',
