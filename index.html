@@ -12,7 +12,9 @@
     <div class="topbar__inner">
       <div class="topbar__logo">◆ CX<span class="c-accent">Profit</span></div>
       <nav class="topbar__nav" id="topNav">
-        <button class="topbar__btn active" data-tab="dashboard">📊 Дашборд</button>
+        <button class="topbar__btn active" data-tab="executive">📋 Executive</button>
+        <button class="topbar__btn" data-tab="dashboard">📊 Дашборд</button>
+        <button class="topbar__btn" data-tab="journey">🗺️ Journey</button>
         <button class="topbar__btn" data-tab="profit">💰 Profit</button>
         <button class="topbar__btn" data-tab="sim">🎮 Симулятор</button>
         <button class="topbar__btn" data-tab="voice">🔍 Voice AI</button>
@@ -40,6 +42,12 @@
       .roi-f input { display: none !important; }
       .roi-f .rv span:first-child, .roi-f .rv span:last-child { display: none !important; }
       .alert-item { break-inside: avoid; }
+      .jmap { flex-wrap: nowrap !important; }
+      .jnode { background: #f9f9f9 !important; border-color: #ddd !important; }
+      .jarrow { color: #ddd !important; }
+      .jdrop { background: #fff5f5 !important; }
+      .action-item__roi { color: #00b894 !important; }
+      .issue-card { border-left-color: #e17055 !important; }
       .card__l, .card__t, .block__h, .l, .stat__l, .sim-row .l, .roi-res .l { color: #555 !important; }
       .card__v, .stat__r, .sim-row .v, .roi-res .v { color: #111 !important; }
       .card__v--dng { color: #d63031 !important; }
@@ -60,6 +68,38 @@
     }
     .pdf-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(108,92,231,0.45); }
     @media print { .pdf-btn { display: none !important; } }
+    .jmap { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; padding: 16px 0; }
+    .jnode { flex: 1; min-width: 130px; max-width: 160px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 14px 12px; text-align: center; cursor: pointer; transition: all .2s; }
+    .jnode:hover { border-color: #6c5ce7; background: rgba(108,92,231,0.05); }
+    .jnode--active { border-color: #6c5ce7; background: rgba(108,92,231,0.08); }
+    .jnode--drop { border-color: rgba(225,112,85,0.3); }
+    .jnode__icon { font-size: 24px; margin-bottom: 4px; }
+    .jnode__name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .jnode__clients { font-size: 11px; color: #a1a1aa; }
+    .jnode__conv { font-size: 14px; font-weight: 700; font-family: monospace; margin-top: 4px; }
+    .jnode__conv--up { color: #55efc4; }
+    .jnode__conv--dn { color: #e17055; }
+    .jarrow { display: flex; align-items: center; color: rgba(255,255,255,0.15); font-size: 18px; }
+    .jdetail { display: none; margin-top: 16px; }
+    .jdetail--open { display: block; }
+    .jdrop { background: rgba(225,112,85,0.04); border: 1px solid rgba(225,112,85,0.15); border-radius: 8px; padding: 8px 12px; margin-top: 6px; font-size: 11px; color: #e17055; }
+    .hs { display: inline-flex; align-items: center; gap: 8px; }
+    .hs__ring { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; font-family: monospace; flex-shrink: 0; }
+    .hs__ring--good { background: rgba(85,239,196,0.1); color: #55efc4; border: 2px solid #55efc4; }
+    .hs__ring--warn { background: rgba(253,203,110,0.1); color: #fdcb6e; border: 2px solid #fdcb6e; }
+    .hs__ring--bad { background: rgba(225,112,85,0.1); color: #e17055; border: 2px solid #e17055; }
+    .action-item { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; gap: 12px; }
+    .action-item:last-child { border-bottom: none; }
+    .action-item__tag { font-size: 10px; padding: 2px 8px; border-radius: 100px; background: rgba(108,92,231,0.1); color: #a29bfe; font-weight: 600; flex-shrink: 0; }
+    .action-item__text { flex: 1; font-size: 13px; }
+    .action-item__roi { font-size: 12px; font-weight: 700; font-family: monospace; color: #55efc4; flex-shrink: 0; }
+    .issue-card { padding: 14px; border-left: 3px solid; margin-bottom: 10px; }
+    .issue-card:last-child { margin-bottom: 0; }
+    .issue-card__h { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .issue-card__h span { font-family: monospace; color: #e17055; }
+    .issue-card__d { font-size: 12px; color: #a1a1aa; }
+    .exec-trend { display: flex; align-items: end; gap: 2px; height: 30px; }
+    .exec-trend div { width: 6px; border-radius: 2px 2px 0 0; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #0a0a0f; color: #e4e4e7; }
     .c-accent { color: #6c5ce7; }

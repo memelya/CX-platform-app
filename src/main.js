@@ -50,7 +50,7 @@ function fnum(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))
 function pct(n) { return (n * 100).toFixed(1) + '%'; }
 
 // ====== PDF Export ======
-const VIEW_NAMES = { dashboard:'CX Command Center', profit:'Profit Cockpit', sim:'Simulation Sandbox', voice:'Voice-of-Customer AI', roi:'ROI Calculator' };
+const VIEW_NAMES = { executive:'Executive Summary', dashboard:'CX Command Center', journey:'Customer Journey Map', profit:'Profit Cockpit', sim:'Simulation Sandbox', voice:'Voice-of-Customer AI', roi:'ROI Calculator' };
 
 function exportPdf(view) {
   const ts = new Date();
@@ -78,12 +78,12 @@ function exportPdf(view) {
 
 // ====== Router ======
 const app = document.getElementById('app');
-let currentView = 'dashboard';
+let currentView = 'executive';
 
 function show(view) {
   currentView = view;
   document.querySelectorAll('.topbar__btn').forEach(b => b.classList.toggle('active', b.dataset.tab === view));
-  const fns = { dashboard, profit, sim, voice, roi };
+  const fns = { executive, dashboard, journey, profit, sim, voice, roi };
   if (fns[view]) fns[view]();
   // Add PDF button after render
   setTimeout(addPdfButton, 50);
@@ -505,10 +505,218 @@ function roi() {
   rCalc();
 }
 
+// ====== Executive Summary ======
+function executive() {
+  const tc = totalClients();
+  const tr = totalRevenue();
+  const lr = lostRevenue();
+  const cr = churnRate();
+  const nps = (68 + Math.random() * 6).toFixed(1);
+  const csat = (3.7 + Math.random() * 0.3).toFixed(1);
+  const potential = lr * 0.23;
+  // Health score (composite: 40% NPS + 30% retention + 30% csat, normalized to 100)
+  const healthRaw = (nps / 100 * 40) + ((1 - cr) * 30) + (csat / 5 * 30);
+  const health = Math.min(100, Math.round(healthRaw * 1.2));
+  const healthClass = health >= 65 ? 'good' : health >= 45 ? 'warn' : 'bad';
+  // Mini trend sparklines
+  const trendData = Array.from({length: 10}, () => 5 + Math.random() * 5);
+  const trendMax = Math.max(...trendData);
+
+  app.innerHTML = `
+    <div class="view">
+      <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+        <div>
+          <h2 style="margin-bottom:0">Executive Summary</h2>
+          <p style="margin-bottom:0">Ключевые показатели за период</p>
+        </div>
+        <div class="hs">
+          <div class="hs__ring hs__ring--${healthClass}">${health}</div>
+          <div>
+            <div style="font-size:12px;color:#a1a1aa;font-weight:500">Health Score</div>
+            <div style="font-size:13px">${health >= 65 ? '🟢 Стабильно' : health >= 45 ? '🟡 Внимание' : '🔴 Критично'}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card__l">NPS</div>
+          <div class="card__v">${nps}</div>
+          <div class="card__t card__t--up">+3.2 п. за квартал</div>
+          <div class="exec-trend">${trendData.slice(0,10).map(v => `<div style="height:${v/trendMax*28}px;background:#6c5ce7;opacity:${0.3+v/trendMax*0.5}"></div>`).join('')}</div>
+        </div>
+        <div class="card">
+          <div class="card__l">Отток</div>
+          <div class="card__v card__v--dng">${pct(cr)}</div>
+          <div class="card__t card__t--dn">+0.4 п. к прошлому</div>
+          <div class="exec-trend">${trendData.map(v => `<div style="height:${(trendMax-v+1)/trendMax*28}px;background:#e17055;opacity:${0.3+(trendMax-v+1)/trendMax*0.5}"></div>`).join('')}</div>
+        </div>
+        <div class="card">
+          <div class="card__l">Выручка под риском</div>
+          <div class="card__v card__v--prf">${fmt(tr)}</div>
+          <div class="card__t">$${Math.round(lr / 1e6)}M потеряно</div>
+        </div>
+        <div class="card">
+          <div class="card__l">CSAT</div>
+          <div class="card__v">${csat}</div>
+          <div class="card__t card__t--up">+0.2 за период</div>
+          <div class="exec-trend">${trendData.slice(0,8).map(v => `<div style="height:${v/trendMax*28}px;background:#00cec9;opacity:${0.3+v/trendMax*0.5}"></div>`).join('')}</div>
+        </div>
+        <div class="card card--hl">
+          <div class="card__l">Потенциал удержания</div>
+          <div class="card__v card__v--prf">${fmt(potential)}</div>
+          <div class="card__t card__t--up">+23% recovery rate</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="block">
+          <div class="block__h">Топ проблем <span>Срочные</span></div>
+          ${ALERTS.slice(0,3).map(a => `
+            <div class="issue-card" style="border-left-color:${a.sev === 'h' ? '#e17055' : a.sev === 'm' ? '#fdcb6e' : '#55efc4'}">
+              <div class="issue-card__h">${a.title} <span>${fmt(a.impact)}</span></div>
+              <div class="issue-card__d">${a.cause}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="block">
+          <div class="block__h">Рекомендованные действия <span>Automated</span></div>
+          ${[
+            { text: 'Запустить удержание Premium (342 клиента)', tag: 'Premium', roi: '7.9x' },
+            { text: 'Оптимизировать IVR-маршрутизацию в Call-центре', tag: 'CSAT', roi: '5.4x' },
+            { text: 'Откатить релиз мобильного приложения', tag: 'Mobile', roi: '3.2x' },
+            { text: 'Запустить A/B тест времени одобрения ипотеки', tag: 'Ипотека', roi: '6.1x' },
+          ].map(a => `
+            <div class="action-item">
+              <span class="action-item__tag">${a.tag}</span>
+              <span class="action-item__text">${a.text}</span>
+              <span class="action-item__roi">ROI ${a.roi}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block__h">Ключевые метрики по сегментам</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+          ${SEGMENTS.map(s => `
+            <div style="text-align:center;padding:8px;border-left:2px solid ${s.color}">
+              <div style="font-size:11px;color:#a1a1aa">${s.name}</div>
+              <div style="font-size:15px;font-weight:700;font-family:monospace">${(s.clients/1e6).toFixed(1)}M</div>
+              <div style="font-size:11px;color:#a1a1aa">ARPU $${s.arpu} | Отток ${pct(s.churn)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ====== Customer Journey Map ======
+function journey() {
+  // Journey stages for a retail bank
+  const stages = [
+    { id: 'visit', icon: '👁️', name: 'Визит', clients: 7500000, toNext: 0.32, lossPerDrop: 0, color: '#6c5ce7' },
+    { id: 'register', icon: '📝', name: 'Регистрация', clients: 2400000, toNext: 0.55, lossPerDrop: 5200000, color: '#00cec9' },
+    { id: 'deposit', icon: '💰', name: 'Первый депозит', clients: 1320000, toNext: 0.68, lossPerDrop: 3800000, color: '#fdcb6e' },
+    { id: 'active', icon: '⚡', name: 'Active (30d)', clients: 897600, toNext: 0.72, lossPerDrop: 2900000, color: '#e17055' },
+    { id: 'cross', icon: '📈', name: 'Cross-sell', clients: 646272, toNext: 0.45, lossPerDrop: 4200000, color: '#55efc4' },
+    { id: 'loyal', icon: '🏆', name: 'Loyal (6mo+)', clients: 290822, toNext: 0.0, lossPerDrop: 0, color: '#6c5ce7' },
+  ];
+
+  let activeStage = 2;
+
+  function render(stageIdx) {
+    activeStage = stageIdx;
+    const detail = stages[stageIdx];
+    const dropped = stages[stageIdx].clients * (1 - stages[stageIdx].toNext);
+    const arpuAtStage = Math.round(400 * (stageIdx + 1) / stages.length);
+
+    app.innerHTML = `
+      <div class="view">
+        <h2>Customer Journey Map</h2>
+        <p>Путь клиента от первого касания до удержания. Нажмите на этап — увидите детали.</p>
+
+        <div class="jmap">
+          ${stages.map((s, i) => `
+            <div class="jarrow" style="${i === 0 ? 'display:none' : ''}">→</div>
+            <div class="jnode ${i === stageIdx ? 'jnode--active' : ''} ${s.toNext < 0.5 && i > 0 ? 'jnode--drop' : ''}" data-idx="${i}">
+              <div class="jnode__icon">${s.icon}</div>
+              <div class="jnode__name">${s.name}</div>
+              <div class="jnode__clients">${(s.clients / 1000).toFixed(0)}K</div>
+              <div class="jnode__conv ${s.toNext >= 0.5 ? 'jnode__conv--up' : 'jnode__conv--dn'}">
+                → ${(s.toNext * 100).toFixed(0)}%
+              </div>
+              ${s.lossPerDrop > 0 ? `<div class="jdrop">▼ $${(s.lossPerDrop/1e6).toFixed(1)}M потеряно</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="block" id="jDetail">
+          <div class="block__h">Детали этапа: <strong>${detail.name}</strong> <span>Stage ${stageIdx + 1} of ${stages.length}</span></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:12px">
+            <div>
+              <div style="font-size:11px;color:#a1a1aa">Вошло клиентов</div>
+              <div style="font-size:22px;font-weight:700;font-family:monospace">${(detail.clients / 1000).toFixed(0)}K</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:#a1a1aa">Ушло на этом этапе</div>
+              <div style="font-size:22px;font-weight:700;font-family:monospace;color:#e17055">${(dropped / 1000).toFixed(0)}K</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:#a1a1aa">Конверсия → далее</div>
+              <div style="font-size:22px;font-weight:700;font-family:monospace;color:#55efc4">${(detail.toNext * 100).toFixed(0)}%</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:#a1a1aa">ARPU на этапе</div>
+              <div style="font-size:22px;font-weight:700;font-family:monospace">$${arpuAtStage}</div>
+            </div>
+          </div>
+          ${detail.lossPerDrop > 0 ? `
+            <div style="margin-top:16px;padding:12px;background:rgba(225,112,85,0.06);border-radius:8px;border-left:3px solid #e17055">
+              <strong>🔴 Потеря на переходе:</strong> ${(dropped / 1000).toFixed(0)}K клиентов не перешли на следующий этап.
+              Потерянный доход: <strong style="font-family:monospace">$${Math.round(dropped * arpuAtStage / 1000) * 1000}</strong>
+            </div>
+          ` : `
+            <div style="margin-top:16px;padding:12px;background:rgba(85,239,196,0.06);border-radius:8px;border-left:3px solid #55efc4">
+              🟢 Финальный этап. ${(detail.clients / 1000).toFixed(0)}K лояльных клиентов.
+              Пожизненная ценность когорты: <strong style="font-family:monospace">$${Math.round(detail.clients * 1200 / 1e6)}M</strong>
+            </div>
+          `}
+        </div>
+
+        <div class="block" style="margin-top:12px">
+          <div class="block__h">Воронка конверсии <span>Total Funnel</span></div>
+          ${stages.map((s, i) => {
+            const maxClients = stages[0].clients;
+            const w = s.clients / maxClients * 100;
+            return `
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+                <span style="font-size:12px;width:120px;flex-shrink:0;${i === stageIdx ? 'color:#fff;font-weight:700' : 'color:#a1a1aa'}">${s.icon} ${s.name}</span>
+                <div style="flex:1;height:24px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden">
+                  <div style="height:100%;width:${w}%;background:${s.color};border-radius:4px;opacity:${0.5 + (w/100)*0.5};transition:width .3s"></div>
+                </div>
+                <span style="font-family:monospace;font-size:13px;font-weight:700;width:80px;text-align:right">${(s.clients/1000).toFixed(0)}K</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+
+    // Attach click handlers
+    document.querySelectorAll('.jnode').forEach(el => {
+      el.addEventListener('click', () => render(parseInt(el.dataset.idx)));
+    });
+  }
+
+  render(2); // start at Active stage
+}
+
 // ====== Init ======
 document.querySelectorAll('.topbar__btn').forEach(b => {
   b.addEventListener('click', () => show(b.dataset.tab));
 });
 
-show('dashboard');
-console.log('🧿 CX Profit Platform — app loaded');
+show('executive');
+console.log('🧿 CX Profit Platform — app loaded'); 
