@@ -3,465 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CX Profit Platform — Аналитическая платформа клиентского опыта</title>
-  <meta name="description" content="Превратите клиентский опыт в измеримую прибыль. Единственная CX-платформа, которая не просто показывает цифры, а помогает зарабатывать." />
+  <title>CX Profit Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0f'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-size='22' font-weight='bold' fill='%236c5ce7' font-family='sans-serif'%3E◆%3C/text%3E%3C/svg%3E" />
   <script type="module" src="/src/main.js"></script>
 </head>
 <body>
-
-  <!-- ====== NAV ====== -->
   <nav class="nav" id="nav">
-    <div class="container nav__inner">
-      <a href="#" class="nav__logo">
+    <div class="nav__inner">
+      <div class="nav__logo">
         <span class="nav__logo-icon">◆</span>
-        <span class="nav__logo-text">CX<span class="text-accent">Profit</span></span>
-      </a>
-      <div class="nav__links" id="navLinks">
-        <a href="#problem" class="nav__link">Проблема</a>
-        <a href="#platform" class="nav__link">Платформа</a>
-        <a href="#how" class="nav__link">Как работает</a>
-        <a href="#roi" class="nav__link">ROI</a>
-        <a href="#cases" class="nav__link">Кейсы</a>
-        <a href="#contact" class="nav__link nav__link--cta">Связаться</a>
+        <span>CX<span class="text-accent">Profit</span></span>
       </div>
-      <button class="nav__toggle" id="navToggle" aria-label="Меню">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="nav__links" id="navLinks">
+        <a class="nav__link nav__link--active" data-view="dashboard">Дашборд</a>
+        <a class="nav__link" data-view="profit">Profit Cockpit</a>
+        <a class="nav__link" data-view="simulation">Симулятор</a>
+        <a class="nav__link" data-view="voice">Voice AI</a>
+        <a class="nav__link" data-view="roi">ROI</a>
+      </div>
+      <div class="nav__right">
+        <select class="nav__select" id="periodSelect">
+          <option>Последние 7 дней</option>
+          <option selected>Последние 30 дней</option>
+          <option>Последний квартал</option>
+          <option>Последний год</option>
+        </select>
+        <button class="nav__alert-btn" id="alertBtn" title="Алерты">
+          <span>🔔</span>
+          <span class="nav__alert-badge" id="alertBadge">3</span>
+        </button>
+      </div>
     </div>
   </nav>
 
-  <!-- ====== HERO ====== -->
-  <section class="hero" id="hero">
-    <div class="hero__bg"></div>
-    <div class="container hero__inner">
-      <div class="hero__badge">Profit-First CX Platform</div>
-      <h1 class="hero__title">
-        Клиентский опыт —<br />
-        <span class="text-gradient">это деньги</span>
-      </h1>
-      <p class="hero__subtitle">
-        Единственная CX-платформа, которая не просто измеряет NPS, а показывает, 
-        <strong>сколько вы теряете</strong> — и что делать, чтобы вернуть.
-      </p>
-      <div class="hero__actions">
-        <a href="#roi" class="btn btn--primary">Рассчитать потенциальный ROI</a>
-        <a href="#platform" class="btn btn--ghost">Как это работает →</a>
-      </div>
-      <div class="hero__stats">
-        <div class="hero__stat">
-          <span class="hero__stat-num">$18M+</span>
-          <span class="hero__stat-label">дополнительной прибыли на кейсах</span>
-        </div>
-        <div class="hero__stat">
-          <span class="hero__stat-num">12п</span>
-          <span class="hero__stat-label">рост NPS за квартал</span>
-        </div>
-        <div class="hero__stat">
-          <span class="hero__stat-num">23%</span>
-          <span class="hero__stat-label">снижение оттока</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  <main id="app">
+    <div class="loading">🧿 Загружаем платформу...</div>
+  </main>
 
-  <!-- ====== PROBLEM ====== -->
-  <section class="section" id="problem">
-    <div class="container">
-      <div class="section__header">
-        <span class="section__label">Проблема</span>
-        <h2 class="section__title">CX-данные есть. <span class="text-gradient">Прибыли — нет.</span></h2>
-        <p class="section__desc">
-          Крупные банки тратят миллионы на Qualtrics, Medallia, NICE — но CEO не видит 
-          связи между NPS и P&amp;L. Потому что её никто и не построил.
-        </p>
-      </div>
-      <div class="problem__grid">
-        <div class="problem__card">
-          <div class="problem__icon">📊</div>
-          <h3>Дашборды без действий</h3>
-          <p>Красивые графики, на которые смотрят раз в месяц. Нет кнопки «исправить».</p>
-        </div>
-        <div class="problem__card">
-          <div class="problem__icon">💰</div>
-          <h3>CX — затраты, не инвестиции</h3>
-          <p>Отдел CX просит бюджет, но не может показать ROI в деньгах, а не в баллах.</p>
-        </div>
-        <div class="problem__card">
-          <div class="problem__icon">🔮</div>
-          <h3>Реактивность вместо предиктивности</h3>
-          <p>Проблему видят, когда клиент уже ушёл. А нужно — за 3 недели до.</p>
-        </div>
-        <div class="problem__card">
-          <div class="problem__icon">🧩</div>
-          <h3>Данные в silo</h3>
-          <p>Голос клиента в Call-центре, поведение — в CRM, транзакции — в Core. Никто не сводит.</p>
-        </div>
-      </div>
+  <div class="alert-panel" id="alertPanel">
+    <div class="alert-panel__header">
+      <h3>Алерты</h3>
+      <button id="alertClose">✕</button>
     </div>
-  </section>
-
-  <!-- ====== PLATFORM ====== -->
-  <section class="section section--dark" id="platform">
-    <div class="container">
-      <div class="section__header">
-        <span class="section__label">Платформа</span>
-        <h2 class="section__title">Четыре двигателя <span class="text-gradient">вашей прибыли</span></h2>
-        <p class="section__desc">
-          Не «очередной дашборд». Полноценная диспетчерская клиентского опыта 
-          с causality-driven рекомендациями.
-        </p>
-      </div>
-      <div class="platform__grid">
-        <div class="platform__card platform__card--featured">
-          <div class="platform__card-header">
-            <span class="platform__icon">🎯</span>
-            <span class="platform__tag">Основной интерфейс</span>
-          </div>
-          <h3>CX Command Center</h3>
-          <p>Центр управления опытом в реальном времени. Карта потоков клиентов, алерты с прогнозом ущерба, action-кнопки.</p>
-          <ul class="platform__features">
-            <li>Heatmap оттока по сегментам</li>
-            <li>Live-алерт: «342 клиента на грани = $2.7M»</li>
-            <li>Кнопка: запустить сценарий удержания</li>
-          </ul>
-        </div>
-        <div class="platform__card">
-          <div class="platform__card-header">
-            <span class="platform__icon">📈</span>
-          </div>
-          <h3>Profit Cockpit</h3>
-          <p>Перевод CX-метрик в деньги. Каждый пункт NPS, CSAT, CES — в валовой прибыли.</p>
-          <ul class="platform__features">
-            <li>CLV × Retention × Revenue per touchpoint</li>
-            <li>P&amp;L-коннект с реальными отчётами</li>
-            <li>Profit Waterfall: что и где теряется</li>
-          </ul>
-        </div>
-        <div class="platform__card">
-          <div class="platform__card-header">
-            <span class="platform__icon">🔬</span>
-          </div>
-          <h3>Simulation Sandbox</h3>
-          <p>Flight simulator для CX. Меняй параметры — смотри эффект на выручку.</p>
-          <ul class="platform__features">
-            <li>«Сократим время ответа на 30 сек → +1.2% конверсии»</li>
-            <li>A/B тест гипотез на исторических данных</li>
-            <li>Causal Inference: корреляция ≠ причина</li>
-          </ul>
-        </div>
-        <div class="platform__card">
-          <div class="platform__card-header">
-            <span class="platform__icon">🔍</span>
-          </div>
-          <h3>Voice-of-Customer AI</h3>
-          <p>Семантический поиск по жалобам через LLM. Просто спроси — получи ответ с цитатами.</p>
-          <ul class="platform__features">
-            <li>«Почему уходят после кредитной карты?» → топ-5 причин</li>
-            <li>Эмоциональная окраска по звонкам и чатам</li>
-            <li>Связь жалобы с продуктом и сегментом</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== HOW IT WORKS ====== -->
-  <section class="section" id="how">
-    <div class="container">
-      <div class="section__header">
-        <span class="section__label">Как работает</span>
-        <h2 class="section__title">4 шага от данных <span class="text-gradient">до денег</span></h2>
-      </div>
-      <div class="how__steps">
-        <div class="how__step">
-          <div class="how__step-num">01</div>
-          <div class="how__step-content">
-            <h3>Подключаем данные</h3>
-            <p>Call-центр, чаты, мобильное приложение, отделения, CRM, транзакции. Data Fabric объединяет всё.</p>
-          </div>
-        </div>
-        <div class="how__step-arrow">↓</div>
-        <div class="how__step">
-          <div class="how__step-num">02</div>
-          <div class="how__step-content">
-            <h3>Строим Customer 360</h3>
-            <p>ML-модели склеивают профиль клиента: кто он, что делает, что чувствует, сколько стоит.</p>
-          </div>
-        </div>
-        <div class="how__step-arrow">↓</div>
-        <div class="how__step">
-          <div class="how__step-num">03</div>
-          <div class="how__step-content">
-            <h3>Анализируем + Предсказываем</h3>
-            <p>Churn Prediction, Sentiment, Journey Mining, Causal Inference. Платформа находит причины и оценивает эффект.</p>
-          </div>
-        </div>
-        <div class="how__step-arrow">↓</div>
-        <div class="how__step">
-          <div class="how__step-num">04</div>
-          <div class="how__step-content">
-            <h3>Рекомендуем + Действуем</h3>
-            <p>Конкретные action items бизнесу с цифрами: «Эти 587 клиентов уйдут, если не сделать X. Потеря — $847K.»</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== ROI CALCULATOR ====== -->
-  <section class="section section--dark" id="roi">
-    <div class="container">
-      <div class="section__header">
-        <span class="section__label">ROI Калькулятор</span>
-        <h2 class="section__title">Сколько вы <span class="text-gradient">теряете</span> прямо сейчас?</h2>
-        <p class="section__desc">
-          Введите параметры вашего банка — мы покажем потенциальный эффект от внедрения.
-          Никаких форм захвата, просто расчёт.
-        </p>
-      </div>
-      <div class="roi__calculator" id="roiCalc">
-        <div class="roi__inputs">
-          <div class="roi__field">
-            <label>Количество розничных клиентов</label>
-            <input type="range" id="roiClients" min="100000" max="20000000" step="100000" value="3000000" />
-            <div class="roi__range-values">
-              <span>100K</span>
-              <span id="roiClientsVal">3 000 000</span>
-              <span>20M</span>
-            </div>
-          </div>
-          <div class="roi__field">
-            <label>Средний годовой доход с клиента (ARPU), $</label>
-            <input type="range" id="roiArpu" min="50" max="2000" step="10" value="400" />
-            <div class="roi__range-values">
-              <span>$50</span>
-              <span id="roiArpuVal">$400</span>
-              <span>$2 000</span>
-            </div>
-          </div>
-          <div class="roi__field">
-            <label>Текущий годовой отток клиентов, %</label>
-            <input type="range" id="roiChurn" min="5" max="40" step="0.5" value="15" />
-            <div class="roi__range-values">
-              <span>5%</span>
-              <span id="roiChurnVal">15%</span>
-              <span>40%</span>
-            </div>
-          </div>
-        </div>
-        <div class="roi__results">
-          <div class="roi__result-item">
-            <span class="roi__result-label">Годовая потеря от оттока</span>
-            <span class="roi__result-value" id="roiLoss">$180 000 000</span>
-          </div>
-          <div class="roi__result-item roi__result-item--highlight">
-            <span class="roi__result-label">Потенциальное удержание с CX Profit</span>
-            <span class="roi__result-value" id="roiSaved">$41 400 000</span>
-          </div>
-          <div class="roi__result-item">
-            <span class="roi__result-label">Прогнозируемый ROI внедрения</span>
-            <span class="roi__result-value" id="roiROI">7.4x</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== FOR WHOM ====== -->
-  <section class="section" id="whom">
-    <div class="container">
-      <div class="section__header">
-        <span class="section__label">Кому нужно</span>
-        <h2 class="section__title">Для тех, кто <span class="text-gradient">отвечает за результат</span></h2>
-      </div>
-      <div class="whom__grid">
-        <div class="whom__card">
-          <div class="whom__icon">👔</div>
-          <h3>CEO / Правление</h3>
-          <p>Видите CX в P&amp;L. Принимаете решения на основе данных, а не догадок. ROI каждого изменения — в цифрах.</p>
-        </div>
-        <div class="whom__card">
-          <div class="whom__icon">🏦</div>
-          <h3>Глава розничного бизнеса</h3>
-          <p>Знаете, какие точки контакта теряют деньги, и можете нажать кнопку «исправить» прямо из платформы.</p>
-        </div>
-        <div class="whom__card">
-          <div class="whom__icon">🖥️</div>
-          <h3>CDO / CTO</h3>
-          <p>Data Mesh-архитектура. Встраивается в существующий ландшафт. Open API. Никаких data silo.</p>
-        </div>
-        <div class="whom__card">
-          <div class="whom__icon">🎧</div>
-          <h3>Head of CX</h3>
-          <p>Перестанете быть «отделом отчётов». Станете центром генерации прибыли. Бюджет защищён цифрами.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== CASES ====== -->
-  <section class="section section--dark" id="cases">
-    <div class="container">
-      <div class="section__header">
-        <span class="section__label">Кейсы</span>
-        <h2 class="section__title">Реальные результаты <span class="text-gradient">в деньгах</span></h2>
-        <p class="section__desc">Анонимизированные данные с пилотных внедрений в банках из топ-30.</p>
-      </div>
-      <div class="cases__grid">
-        <div class="case__card">
-          <div class="case__card-header">
-            <span class="case__badge">Топ-10 банк</span>
-            <span class="case__metric">+$18.2M</span>
-          </div>
-          <h3>Снижение оттока в Premium</h3>
-          <p>Churn Prediction выявил 4 200 клиентов на грани ухода. Персонализированные офферы удержали 73%.</p>
-          <div class="case__details">
-            <span>📉 Отток: 12% → 4%</span>
-            <span>💰 ROI: 8.3x</span>
-          </div>
-        </div>
-        <div class="case__card">
-          <div class="case__card-header">
-            <span class="case__badge">Топ-25 банк</span>
-            <span class="case__metric">+$7.4M</span>
-          </div>
-          <h3>Оптимизация контакт-центра</h3>
-          <p>Simulation Sandbox показал: сокращение AHT на 20 сек удерживает +5% клиентов.</p>
-          <div class="case__details">
-            <span>📉 AHT: 4:10 → 2:50</span>
-            <span>💰 ROI: 5.7x</span>
-          </div>
-        </div>
-        <div class="case__card">
-          <div class="case__card-header">
-            <span class="case__badge">Топ-15 банк</span>
-            <span class="case__metric">+$12.1M</span>
-          </div>
-          <h3>Ипотечный процесс</h3>
-          <p>Voice AI нашёл топ-3 причины отказа в онбординге. Изменение UX формы увеличило конверсию.</p>
-          <div class="case__details">
-            <span>📈 Конверсия: 34% → 51%</span>
-            <span>💰 ROI: 6.2x</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== WHY US ====== -->
-  <section class="section" id="why">
-    <div class="container">
-      <div class="section__header">
-        <span class="section__label">Почему мы</span>
-        <h2 class="section__title">MetaGPT vs <span class="text-gradient">мировые решения</span></h2>
-      </div>
-      <div class="why__table-wrapper">
-        <table class="why__table">
-          <thead>
-            <tr>
-              <th>Критерий</th>
-              <th>Qualtrics / Medallia</th>
-              <th class="col-best">CX Profit Platform</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Фокус</td>
-              <td>Измерение удовлетворённости</td>
-              <td class="col-best">Измерение + генерация прибыли</td>
-            </tr>
-            <tr>
-              <td>Реагирование</td>
-              <td>Alert → отчёт человеку</td>
-              <td class="col-best">Alert → предложение действия с прогнозом эффекта</td>
-            </tr>
-            <tr>
-              <td>Коннект с P&amp;L</td>
-              <td>Косвенный (NPS → vague)</td>
-              <td class="col-best">Прямой: CLV × Retention × Revenue</td>
-            </tr>
-            <tr>
-              <td>Causal Inference</td>
-              <td>Нет / поверхностно</td>
-              <td class="col-best">DoWhy / EconML: доказываем причинность</td>
-            </tr>
-            <tr>
-              <td>Prescription</td>
-              <td>Редко, общими словами</td>
-              <td class="col-best">Конкретно: «верни 587 клиентов — это $847K»</td>
-            </tr>
-            <tr>
-              <td>Simulation</td>
-              <td>Нет</td>
-              <td class="col-best">Flight simulator: «что если» в реальных цифрах</td>
-            </tr>
-            <tr>
-              <td>LLM Voice Search</td>
-              <td>Базовый text analytics</td>
-              <td class="col-best">Семантический поиск с цитатами и эмоциями</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== CONTACT ====== -->
-  <section class="section section--dark" id="contact">
-    <div class="container">
-      <div class="contact__wrapper">
-        <div class="contact__info">
-          <span class="section__label">Связаться</span>
-          <h2 class="section__title">Готовы увидеть <span class="text-gradient">свои цифры</span>?</h2>
-          <p class="section__desc">
-            Не «демо ради демо». Мы сделаем Profit Simulation на ваших данных за 40 минут.
-            Результат: точная цифра, сколько ваш банк теряет на CX — и что с этим делать.
-          </p>
-          <div class="contact__benefits">
-            <div class="contact__benefit">✓ Profit Simulation на ваших данных</div>
-            <div class="contact__benefit">✓ Без commitment и подписания договоров</div>
-            <div class="contact__benefit">✓ Результат — в деньгах, не в баллах</div>
-          </div>
-        </div>
-        <form class="contact__form" id="contactForm">
-          <input type="text" placeholder="Имя" required />
-          <input type="email" placeholder="Email" required />
-          <input type="text" placeholder="Название банка" required />
-          <select required>
-            <option value="">Ваша роль</option>
-            <option>CEO / Правление</option>
-            <option>Глава розницы</option>
-            <option>CDO / CTO</option>
-            <option>Head of CX</option>
-            <option>Другое</option>
-          </select>
-          <textarea placeholder="Что хотите обсудить?" rows="3"></textarea>
-          <button type="submit" class="btn btn--primary btn--full">Запросить Profit Simulation</button>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== FOOTER ====== -->
-  <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <span class="nav__logo-icon">◆</span>
-        <span class="nav__logo-text">CX<span class="text-accent">Profit</span></span>
-      </div>
-      <div class="footer__links">
-        <a href="#problem">Проблема</a>
-        <a href="#platform">Платформа</a>
-        <a href="#how">Как работает</a>
-        <a href="#cases">Кейсы</a>
-      </div>
-      <p class="footer__copy">© 2026 CX Profit Platform. Не просто цифры — прибыль.</p>
-    </div>
-  </footer>
-
+    <div class="alert-panel__list" id="alertList"></div>
+  </div>
+  <div class="alert-overlay" id="alertOverlay"></div>
 </body>
 </html>
