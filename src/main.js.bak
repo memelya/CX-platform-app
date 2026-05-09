@@ -49,54 +49,13 @@ function fmt(n) { return n >= 1e6 ? '$' + (n/1e6).toFixed(1) + 'M' : '$' + Math.
 function fnum(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
 function pct(n) { return (n * 100).toFixed(1) + '%'; }
 
-// ====== PDF Export ======
-const VIEW_NAMES = { dashboard:'CX Command Center', profit:'Profit Cockpit', sim:'Simulation Sandbox', voice:'Voice-of-Customer AI', roi:'ROI Calculator' };
-
-function exportPdf(view) {
-  const ts = new Date();
-  const dateStr = ts.toLocaleDateString('ru-RU', { year:'numeric', month:'long', day:'numeric' });
-  const timeStr = ts.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' });
-
-  // Insert print-only header
-  const existingHeader = document.querySelector('.pdf-header');
-  if (existingHeader) existingHeader.remove();
-  const existingMeta = document.querySelector('.pdf-meta');
-  if (existingMeta) existingMeta.remove();
-
-  const header = document.createElement('div');
-  header.className = 'pdf-header';
-  header.textContent = '◆ CX Profit  —  ' + VIEW_NAMES[view];
-  document.querySelector('.view').prepend(header);
-
-  const meta = document.createElement('div');
-  meta.className = 'pdf-meta';
-  meta.textContent = 'Отчёт сгенерирован: ' + dateStr + ' в ' + timeStr + '  |  Данные являются конфиденциальными';
-  document.querySelector('.view').prepend(meta);
-
-  window.print();
-}
-
 // ====== Router ======
 const app = document.getElementById('app');
-let currentView = 'dashboard';
 
 function show(view) {
-  currentView = view;
   document.querySelectorAll('.topbar__btn').forEach(b => b.classList.toggle('active', b.dataset.tab === view));
   const fns = { dashboard, profit, sim, voice, roi };
   if (fns[view]) fns[view]();
-  // Add PDF button after render
-  setTimeout(addPdfButton, 50);
-}
-
-function addPdfButton() {
-  const existing = document.querySelector('.pdf-btn');
-  if (existing) existing.remove();
-  const btn = document.createElement('button');
-  btn.className = 'pdf-btn';
-  btn.innerHTML = '📄 Скачать PDF';
-  btn.onclick = () => exportPdf(currentView);
-  document.body.appendChild(btn);
 }
 
 // ====== Dashboard ======

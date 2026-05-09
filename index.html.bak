@@ -24,42 +24,6 @@
   <main id="app"></main>
 
   <style>
-    @media print {
-      body { background: #fff !important; color: #111 !important; }
-      .topbar, .pdf-btn, .topbar__btn { display: none !important; }
-      .view { padding: 0 !important; max-width: 100% !important; }
-      #app { padding-top: 0 !important; }
-      .block, .card, .sim-b, .sim-l, .roi-c { break-inside: avoid; background: #fff !important; border-color: #ddd !important; }
-      .sim-ctrl input { display: none !important; }
-      .sim-ctrl label .val { color: #111 !important; font-size: 14px !important; }
-      .bar { background: #eee !important; }
-      .bar__fill { opacity: 0.7 !important; }
-      .vreason { break-inside: avoid; background: #f9f9f9 !important; border-color: #eee !important; }
-      .vreason .q { background: #f0f0f0 !important; border-left-color: #6c5ce7 !important; color: #333 !important; }
-      .grid-2 { grid-template-columns: 1fr 1fr !important; page-break-inside: avoid; }
-      .roi-f input { display: none !important; }
-      .roi-f .rv span:first-child, .roi-f .rv span:last-child { display: none !important; }
-      .alert-item { break-inside: avoid; }
-      .card__l, .card__t, .block__h, .l, .stat__l, .sim-row .l, .roi-res .l { color: #555 !important; }
-      .card__v, .stat__r, .sim-row .v, .roi-res .v { color: #111 !important; }
-      .card__v--dng { color: #d63031 !important; }
-      .card__v--prf, .roi-res .v--p, .sim-row .v--p { background: none !important; -webkit-text-fill-color: initial !important; color: #00b894 !important; }
-      .card--hl { border-color: #6c5ce7 !important; }
-      .pdf-header { display: block !important; text-align: center; font-size: 18px; font-weight: 700; color: #6c5ce7; margin-bottom: 16px; }
-      .pdf-meta { display: block !important; text-align: center; font-size: 11px; color: #999; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #ddd; }
-      @page { margin: 1.5cm; }
-    }
-    .pdf-header, .pdf-meta { display: none; }
-    .pdf-btn {
-      position: fixed; bottom: 24px; right: 24px; z-index: 999;
-      background: #6c5ce7; color: #fff; border: none;
-      padding: 12px 20px; border-radius: 100px;
-      font-size: 14px; font-weight: 600; cursor: pointer;
-      font-family: inherit; box-shadow: 0 4px 20px rgba(108,92,231,0.35);
-      transition: all .2s; display: flex; align-items: center; gap: 8px;
-    }
-    .pdf-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(108,92,231,0.45); }
-    @media print { .pdf-btn { display: none !important; } }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #0a0a0f; color: #e4e4e7; }
     .c-accent { color: #6c5ce7; }
